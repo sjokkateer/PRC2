@@ -63,6 +63,7 @@ void displayMenu()
     print("4 display balance");
     print("5 deposit money");
     print("6 smash piggy bank");
+    print("7 display id");
 }
 
 int getChoiceUntilValid()
@@ -167,6 +168,10 @@ void callAppropriateMethod(int choice, PiggyBank &piggyBank)
             message = "Piggy bank is already broken";
         }
 
+        print(message.c_str());
+        break;
+    case 7:
+        message = "ID: " + to_string(piggyBank.getId());
         print(message.c_str());
         break;
     default:

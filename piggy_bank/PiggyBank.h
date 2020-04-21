@@ -7,6 +7,9 @@ using namespace std;
 class PiggyBank
 {
 private:
+    static int pbId;
+
+    int id;       // unique id to identify the object
     string owner; // PiggyBank owner
     int balance;  // Current balance in PiggyBank
     bool broken;  // true if PiggyBank is broken, else false
@@ -30,6 +33,8 @@ public:
     int smash(); /* pre : PiggyBank is not brokenpost: return current balance and PiggyBank is broken*/
 
     string toString();
+
+    int getId();
 };
 
 #endif

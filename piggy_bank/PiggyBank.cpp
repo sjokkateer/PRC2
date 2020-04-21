@@ -2,8 +2,14 @@
 #include "PiggyBank.h"
 using namespace std;
 
+// Can not be defaulted in the header file
+// since there can only be one such value (class wide variable)
+int PiggyBank::pbId = 0;
+
 void PiggyBank::init(string name, int startBalance)
 {
+    id = ++pbId;
+
     owner = name;
     balance = startBalance;
     broken = false;
@@ -83,4 +89,9 @@ string PiggyBank::toString()
     }
 
     return result;
+}
+
+int PiggyBank::getId()
+{
+    return id;
 }
