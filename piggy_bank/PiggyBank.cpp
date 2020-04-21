@@ -4,7 +4,6 @@ using namespace std;
 
 // Can not be defaulted in the header file
 // since there can only be one such value (class wide variable)
-int PiggyBank::pbId = 0;
 
 void PiggyBank::init(string name, int startBalance)
 {
@@ -17,12 +16,12 @@ void PiggyBank::init(string name, int startBalance)
 
 PiggyBank::PiggyBank(void)
 {
-    init();
+    init("", 0);
 }
 
 PiggyBank::PiggyBank(string name)
 {
-    init(name);
+    init(name, 0);
 }
 
 PiggyBank::PiggyBank(string name, int startBalance)
@@ -75,17 +74,29 @@ int PiggyBank::smash()
     return -1;
 }
 
+bool PiggyBank::belongsTo(int id)
+{
+    return id == getId();
+}
+
 string PiggyBank::toString()
 {
     string result = owner + "'s piggy bank ";
 
+    if (owner.length() == 0)
+    {
+        result = "no one" + result;
+    }
+
+    result = " (" + to_string(getId()) + ") " + result;
+
     if (isBroken())
     {
-        result += " is broken.";
+        result += "is broken.";
     }
     else
     {
-        result += "contains €" + balance + '.';
+        result += "contains €" + to_string(balance) + '.';
     }
 
     return result;
@@ -93,5 +104,5 @@ string PiggyBank::toString()
 
 int PiggyBank::getId()
 {
-    return id;
+    return pbId;
 }

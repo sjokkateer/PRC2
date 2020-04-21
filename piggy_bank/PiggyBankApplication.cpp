@@ -1,9 +1,9 @@
 #include <iostream>
+#include <fstream>
 #include "PiggyBank.h"
 using namespace std;
 
-// One additional file for helper functions probably, that validate the input and such.
-void print(const char *message);
+void print(string message);
 void print();
 void printGreeting();
 void displayMenu();
@@ -13,10 +13,19 @@ bool isNotInteger(string choiceAsString);
 void callAppropriateMethod(int choice, PiggyBank &piggyBank);
 string getOwnerName();
 int getDepositAmount();
+int loadLastId();
+int getMaxId(ifstream &in);
+void getPiggyBankById(PiggyBank &piggyBank);
+int getId();
+void getPiggyBankFromFile(int id, PiggyBank &piggyBank);
+
+#define STORAGE "piggy_banks.txt"
+#define EXIT 0
+
+int PiggyBank::pbId = loadLastId();
 
 int main()
 {
-    const int EXIT = 0;
     int choice;
     PiggyBank piggyBank = PiggyBank();
 
@@ -35,7 +44,7 @@ int main()
     return 0;
 }
 
-void print(const char *message)
+void print(string message)
 {
     cout << message << endl;
 }
@@ -57,13 +66,14 @@ void displayMenu()
     print("Piggy Bank");
     print("----------");
     print("0 to exit");
-    print("1 display owner");
+    print("1 display details");
     print("2 set owner");
-    print("3 is broken");
-    print("4 display balance");
-    print("5 deposit money");
-    print("6 smash piggy bank");
-    print("7 display id");
+    print("3 deposit money");
+    print("4 smash piggy bank");
+    print("5 store current piggy bank");
+    print("6 display stored piggy banks");
+    print("7 create new piggy bank");
+    print("8 select piggy bank by id");
 }
 
 int getChoiceUntilValid()
@@ -100,6 +110,8 @@ bool isNotInteger(string choiceAsString)
 
 void callAppropriateMethod(int choice, PiggyBank &piggyBank)
 {
+    PiggyBank storedPiggies;
+
     string message;
     string owner;
     int balanceAmount;
@@ -107,59 +119,30 @@ void callAppropriateMethod(int choice, PiggyBank &piggyBank)
     int amountToBeDeposited;
     int isSmashed;
 
+    ifstream in;
+    ofstream out;
+
     print();
 
-    // All these procedures could have been used through a class called app or something.
     switch (choice)
     {
     case 1:
-        owner = piggyBank.getOwnerName();
-        message = "The piggy bank is owned by: ";
-
-        if (isEmptyString(owner))
-        {
-            message += "no one yet";
-        }
-
-        message += owner;
-        print(message.c_str());
+        print("Details:");
+        print(piggyBank.toString());
         break;
     case 2:
         owner = getOwnerName();
         piggyBank.setOwnerName(owner);
         break;
     case 3:
-        message = "Piggy bank is";
-
-        if (!piggyBank.isBroken())
-            message += " not";
-
-        message += " broken";
-        print(message.c_str());
-        break;
-    case 4:
-        balanceObtained = piggyBank.getBalance(balanceAmount);
-
-        if (balanceObtained == 0)
-        {
-            message = "Current balance: €" + to_string(balanceAmount);
-        }
-        else
-        {
-            message = "Piggy bank is broken!";
-        }
-
-        print(message.c_str());
-        break;
-    case 5:
         amountToBeDeposited = getDepositAmount();
         piggyBank.depositMoney(amountToBeDeposited);
         piggyBank.getBalance(balanceAmount);
 
         message = "Balance after deposit: €" + to_string(balanceAmount);
-        print(message.c_str());
+        print(message);
         break;
-    case 6:
+    case 4:
         isSmashed = piggyBank.smash();
         message = "Piggy bank is now broken";
 
@@ -168,15 +151,42 @@ void callAppropriateMethod(int choice, PiggyBank &piggyBank)
             message = "Piggy bank is already broken";
         }
 
-        print(message.c_str());
+        print(message);
+        break;
+    case 5:
+
+        out.open(STORAGE, ios_base::app);
+
+        if (out.is_open())
+        {
+            out << piggyBank;
+            out.close();
+        }
+
+        break;
+    case 6:
+        in.open(STORAGE);
+
+        if (in.is_open())
+        {
+            while (in >> storedPiggies)
+            {
+                print(storedPiggies.toString());
+            }
+
+            in.close();
+        }
+
         break;
     case 7:
-        message = "ID: " + to_string(piggyBank.getId());
-        print(message.c_str());
+        piggyBank = PiggyBank();
+        break;
+    case 8:
+        getPiggyBankById(piggyBank);
         break;
     default:
         message = "Your choice: " + to_string(choice) + " does not exist.";
-        print(message.c_str());
+        print(message);
         break;
     }
 
@@ -185,18 +195,12 @@ void callAppropriateMethod(int choice, PiggyBank &piggyBank)
 
 string getOwnerName()
 {
-    char name[50];
-    string asString;
-    // so, while IS integer (double negation)
+    string name;
     // This does however return for ex 1.23 as a name
-    while (isEmptyString(asString) || !isNotInteger(asString))
+    while (isEmptyString(name) || !isNotInteger(name))
     {
         cout << "Please enter a name for owner: ";
-        cin.getline(name, sizeof(name));
-
-        // Cast the character array to a string
-        // to test it against the while's expression again for validation
-        asString = name;
+        getline(cin, name);
     }
 
     return name;
@@ -213,4 +217,75 @@ int getDepositAmount()
     }
 
     return stoi(amount);
+}
+
+int loadLastId()
+{
+    ifstream in(STORAGE);
+
+    if (in.is_open())
+    {
+        return getMaxId(in);
+    }
+
+    return 0;
+}
+
+int getMaxId(ifstream &in)
+{
+    int maxId = 0;
+    int piggyId;
+    PiggyBank temp;
+
+    while (in >> temp)
+    {
+        piggyId = temp.getId();
+        if (piggyId > maxId)
+        {
+            maxId = piggyId;
+        }
+    }
+
+    in.close();
+    return maxId;
+}
+
+void getPiggyBankById(PiggyBank &piggyBank)
+{
+    int id = getId();
+
+    getPiggyBankFromFile(id, piggyBank);
+}
+
+int getId()
+{
+    string id;
+
+    while (isEmptyString(id) || isNotInteger(id))
+    {
+        cout << "Please provide a piggy bank id: ";
+        cin >> id;
+    }
+
+    return stoi(id);
+}
+
+void getPiggyBankFromFile(int id, PiggyBank &piggyBank)
+{
+    ifstream in(STORAGE);
+
+    if (in.is_open())
+    {
+        PiggyBank temp;
+        while (in >> temp)
+        {
+            if (temp.belongsTo(id))
+            {
+                piggyBank = temp;
+                break;
+            }
+        }
+
+        in.close();
+    }
 }
