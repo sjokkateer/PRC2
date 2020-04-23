@@ -19,9 +19,11 @@ private:
     void init(string name, int startBalance);
 
 public:
-    PiggyBank(void);                          /* post: a PiggyBank object is created, owner equals "",broken is false, balance is 0*/
+    PiggyBank();                              /* post: a PiggyBank object is created, owner equals "",broken is false, balance is 0*/
     PiggyBank(string name);                   /* post: a PiggyBank object is created, owner equals name,broken is false, balance is 0*/
     PiggyBank(string name, int startBalance); /* post: a PiggyBank object is created, owner equals name,broken is false, balance is startBalance*/
+
+    ~PiggyBank(); /* Destruct the object */
 
     string getOwnerName();          /* post: the PiggyBank owner's name is returned*/
     void setOwnerName(string name); /* post: the PiggyBank owner's name is set to name*/

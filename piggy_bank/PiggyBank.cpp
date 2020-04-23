@@ -2,9 +2,6 @@
 #include "PiggyBank.h"
 using namespace std;
 
-// Can not be defaulted in the header file
-// since there can only be one such value (class wide variable)
-
 void PiggyBank::init(string name, int startBalance)
 {
     id = ++pbId;
@@ -14,7 +11,7 @@ void PiggyBank::init(string name, int startBalance)
     broken = false;
 }
 
-PiggyBank::PiggyBank(void)
+PiggyBank::PiggyBank()
 {
     init("", 0);
 }
@@ -27,6 +24,11 @@ PiggyBank::PiggyBank(string name)
 PiggyBank::PiggyBank(string name, int startBalance)
 {
     init(name, startBalance);
+}
+
+PiggyBank::~PiggyBank()
+{
+    --pbId;
 }
 
 string PiggyBank::getOwnerName()
@@ -76,7 +78,7 @@ int PiggyBank::smash()
 
 bool PiggyBank::belongsTo(int id)
 {
-    return id == getId();
+    return id == this->id;
 }
 
 string PiggyBank::toString()
@@ -88,7 +90,7 @@ string PiggyBank::toString()
         result = "no one" + result;
     }
 
-    result = " (" + to_string(getId()) + ") " + result;
+    result = " (" + to_string(id) + ") " + result;
 
     if (isBroken())
     {
@@ -104,5 +106,5 @@ string PiggyBank::toString()
 
 int PiggyBank::getId()
 {
-    return pbId;
+    return PiggyBank::pbId;
 }

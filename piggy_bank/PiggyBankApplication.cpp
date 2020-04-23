@@ -22,7 +22,9 @@ void getPiggyBankFromFile(int id, PiggyBank &piggyBank);
 #define STORAGE "piggy_banks.txt"
 #define EXIT 0
 
-int PiggyBank::pbId = loadLastId();
+// Can not be defaulted in the header file
+// since there can only be one such value (class wide variable)
+int PiggyBank::pbId;
 
 int main()
 {
@@ -180,6 +182,7 @@ void callAppropriateMethod(int choice, PiggyBank &piggyBank)
         break;
     case 7:
         piggyBank = PiggyBank();
+        cout << piggyBank << endl;
         break;
     case 8:
         getPiggyBankById(piggyBank);
@@ -239,7 +242,7 @@ int getMaxId(ifstream &in)
 
     while (in >> temp)
     {
-        piggyId = temp.getId();
+        // piggyId = temp.getId();
         if (piggyId > maxId)
         {
             maxId = piggyId;
