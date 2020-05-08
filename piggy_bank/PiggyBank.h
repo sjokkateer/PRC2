@@ -24,6 +24,8 @@ public:
     PiggyBank(string name, int startBalance); /* post: a PiggyBank object is created, owner equals name,broken is false, balance is startBalance*/
 
     static PiggyBank create();
+    static PiggyBank createFrom(string ownerName);
+    static PiggyBank createFrom(string ownerName, int initialBalance);
 
     ~PiggyBank(); /* Destruct the object */
 

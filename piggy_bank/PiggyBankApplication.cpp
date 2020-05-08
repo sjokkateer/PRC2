@@ -12,12 +12,14 @@ bool isEmptyString(string s);
 bool isNotInteger(string choiceAsString);
 void callAppropriateMethod(int choice, PiggyBank &piggyBank);
 string getOwnerName();
-int getDepositAmount();
+int getIntegerAmount(string message);
 int loadLastId();
 int getMaxId(ifstream &in);
 void getPiggyBankById(PiggyBank &piggyBank);
 int getId();
 void getPiggyBankFromFile(int id, PiggyBank &piggyBank);
+void createPiggyBank(PiggyBank &piggyBank);
+void displayCreationMenu();
 
 #define STORAGE "piggy_banks.txt"
 #define BACKUP "piggy_banks_backup.txt"
@@ -141,11 +143,16 @@ void callAppropriateMethod(int choice, PiggyBank &piggyBank)
         piggyBank.setOwnerName(owner);
         break;
     case 3:
-        amountToBeDeposited = getDepositAmount();
-        piggyBank.depositMoney(amountToBeDeposited);
-        piggyBank.getBalance(balanceAmount);
+        message = "Piggy bank is broken, can not deposit!";
 
-        message = "Balance after deposit: €" + to_string(balanceAmount);
+        if (!piggyBank.isBroken())
+        {
+            amountToBeDeposited = getIntegerAmount("Please give an amount to deposit as integer: ");
+            piggyBank.depositMoney(amountToBeDeposited);
+            piggyBank.getBalance(balanceAmount);
+            message = "Balance after deposit: €" + to_string(balanceAmount);
+        }
+
         print(message);
         break;
     case 4:
@@ -230,10 +237,7 @@ void callAppropriateMethod(int choice, PiggyBank &piggyBank)
 
         break;
     case 7:
-        // Lets give the user the option
-        // to choose 1, 2, 3, any other int to exit
-        // to create from name, or from name and initial amount.
-        piggyBank = PiggyBank::create();
+        createPiggyBank(piggyBank);
         break;
     case 8:
         getPiggyBankById(piggyBank);
@@ -249,6 +253,9 @@ void callAppropriateMethod(int choice, PiggyBank &piggyBank)
 
 string getOwnerName()
 {
+    // Ignore \n in case any other input was processed before.
+    cin.ignore();
+
     string name;
     // This does however return for ex 1.23 as a name
     while (isEmptyString(name) || !isNotInteger(name))
@@ -260,13 +267,13 @@ string getOwnerName()
     return name;
 }
 
-int getDepositAmount()
+int getIntegerAmount(string message)
 {
     string amount;
 
     while (isEmptyString(amount) || isNotInteger(amount))
     {
-        cout << "Please give an amount to deposit as integer: ";
+        cout << message;
         cin >> amount;
     }
 
@@ -342,4 +349,42 @@ void getPiggyBankFromFile(int id, PiggyBank &piggyBank)
 
         in.close();
     }
+}
+
+void createPiggyBank(PiggyBank &piggyBank)
+{
+    displayCreationMenu();
+    int creationChoice = getChoiceUntilValid();
+
+    string ownerName;
+    int initialBalance;
+
+    switch (creationChoice)
+    {
+    case 1:
+        piggyBank = PiggyBank::create();
+        break;
+    case 2:
+        ownerName = getOwnerName();
+        piggyBank = PiggyBank::createFrom(ownerName);
+        break;
+    case 3:
+        ownerName = getOwnerName();
+        initialBalance = getIntegerAmount("Please give an amount for initial balance as integer: ");
+        piggyBank = PiggyBank::createFrom(ownerName, initialBalance);
+        break;
+    default:
+        break;
+    }
+}
+
+void displayCreationMenu()
+{
+    print();
+    print("Create New Piggy Bank");
+    print(" ------------------- ");
+    print("1: create new default");
+    print("2: create from owner name");
+    print("3: create from owner name and initial balance");
+    print("any other positive number to cancel");
 }

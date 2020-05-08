@@ -31,11 +31,18 @@ PiggyBank::PiggyBank(string name, int startBalance)
 
 PiggyBank PiggyBank::create()
 {
-    return PiggyBank("", 0);
+    return PiggyBank::createFrom("", 0);
 }
 
-// Could add factory methods for each constructor with a from ...
-// and refactor create to re-use the factory method with most parameters.
+PiggyBank PiggyBank::createFrom(string ownerName)
+{
+    return PiggyBank(ownerName);
+}
+
+PiggyBank PiggyBank::createFrom(string ownerName, int startBalance)
+{
+    return PiggyBank(ownerName, startBalance);
+}
 
 PiggyBank::~PiggyBank()
 {
