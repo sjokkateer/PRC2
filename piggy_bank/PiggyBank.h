@@ -23,6 +23,8 @@ public:
     PiggyBank(string name);                   /* post: a PiggyBank object is created, owner equals name,broken is false, balance is 0*/
     PiggyBank(string name, int startBalance); /* post: a PiggyBank object is created, owner equals name,broken is false, balance is startBalance*/
 
+    static PiggyBank create();
+
     ~PiggyBank(); /* Destruct the object */
 
     string getOwnerName();          /* post: the PiggyBank owner's name is returned*/
@@ -40,7 +42,9 @@ public:
 
     string toString(); /* Returns the object's string representation */
 
-    static int getId(); /* Returns the unique identifier */
+    static int getId(); /* Returns the static class id (number of piggy banks) */
+
+    int getNumber(); /* Returns the actual assigned number for that piggy bank */
 
     // Ofstream inherits from ostream, thus can also be used.
     friend ostream &operator<<(ostream &out, const PiggyBank &piggyBank) /* Overload the << operator to serialize object to file */

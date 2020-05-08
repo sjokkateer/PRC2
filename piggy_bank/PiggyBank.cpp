@@ -13,7 +13,10 @@ void PiggyBank::init(string name, int startBalance)
 
 PiggyBank::PiggyBank()
 {
-    init("", 0);
+    // Default constructor only as place holder
+    this->id = -1;
+    this->owner = "unknown";
+    this->balance = -1;
 }
 
 PiggyBank::PiggyBank(string name)
@@ -26,9 +29,16 @@ PiggyBank::PiggyBank(string name, int startBalance)
     init(name, startBalance);
 }
 
+PiggyBank PiggyBank::create()
+{
+    return PiggyBank("", 0);
+}
+
+// Could add factory methods for each constructor with a from ...
+// and refactor create to re-use the factory method with most parameters.
+
 PiggyBank::~PiggyBank()
 {
-    --pbId;
 }
 
 string PiggyBank::getOwnerName()
@@ -107,4 +117,9 @@ string PiggyBank::toString()
 int PiggyBank::getId()
 {
     return PiggyBank::pbId;
+}
+
+int PiggyBank::getNumber()
+{
+    return this->id;
 }

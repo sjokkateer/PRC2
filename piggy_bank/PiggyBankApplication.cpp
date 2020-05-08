@@ -20,16 +20,19 @@ int getId();
 void getPiggyBankFromFile(int id, PiggyBank &piggyBank);
 
 #define STORAGE "piggy_banks.txt"
+#define BACKUP "piggy_banks_backup.txt"
 #define EXIT 0
 
 // Can not be defaulted in the header file
 // since there can only be one such value (class wide variable)
-int PiggyBank::pbId;
+int PiggyBank::pbId = loadLastId();
 
 int main()
 {
     int choice;
-    PiggyBank piggyBank = PiggyBank();
+    // Start with a new empty piggy bank object, the id will
+    // be 1 larger than largest id that could be found in the file.
+    PiggyBank piggyBank = PiggyBank::create();
 
     printGreeting();
 
@@ -121,8 +124,9 @@ void callAppropriateMethod(int choice, PiggyBank &piggyBank)
     int amountToBeDeposited;
     int isSmashed;
 
-    ifstream in;
+    fstream in;
     ofstream out;
+    ofstream backup;
 
     print();
 
@@ -156,19 +160,64 @@ void callAppropriateMethod(int choice, PiggyBank &piggyBank)
         print(message);
         break;
     case 5:
+        // Quite a long procedure though.
+        backup.open(BACKUP, ios_base::app);
+        in.open(STORAGE);
 
-        out.open(STORAGE, ios_base::app);
-
-        if (out.is_open())
+        // Assume file is not open because it did not exist
+        if (!in.is_open())
         {
-            out << piggyBank;
+            // Thus create the file.
+            out.open(STORAGE);
             out.close();
+
+            // re-open as input.
+            in.open(STORAGE);
         }
+
+        // If both the backup file and the original storage file are open.
+        if (backup.is_open() && in.is_open())
+        {
+            // Flag to test if the piggy bank already exists in original storage
+            // Originally we assume it does not yet exist.
+            bool alreadyExists = false;
+
+            // Load in an object
+            while (in >> storedPiggies)
+            {
+                // Check ids for equal piggy banks.
+                if (storedPiggies.getNumber() == piggyBank.getNumber())
+                {
+                    // Write the new piggy to backup instead of the old
+                    // object in storage.
+                    backup << piggyBank;
+                    // Indicate it already existed.
+                    alreadyExists = true;
+                }
+                else
+                {
+                    backup << storedPiggies;
+                }
+            }
+
+            // Meaning it did not exist inside the old storage file
+            // and thus we can safely assume this is the newest
+            // object and append it to the backup file.
+            if (alreadyExists == false)
+            {
+                backup << piggyBank;
+            }
+        }
+
+        in.close();
+        out.close();
+        // Finally, override the old storage file with our newly generated 'backup' file
+        rename(BACKUP, STORAGE);
 
         break;
     case 6:
         in.open(STORAGE);
-
+        // Write to backup first, then check the original file.
         if (in.is_open())
         {
             while (in >> storedPiggies)
@@ -181,8 +230,10 @@ void callAppropriateMethod(int choice, PiggyBank &piggyBank)
 
         break;
     case 7:
-        piggyBank = PiggyBank();
-        cout << piggyBank << endl;
+        // Lets give the user the option
+        // to choose 1, 2, 3, any other int to exit
+        // to create from name, or from name and initial amount.
+        piggyBank = PiggyBank::create();
         break;
     case 8:
         getPiggyBankById(piggyBank);
@@ -238,11 +289,11 @@ int getMaxId(ifstream &in)
 {
     int maxId = 0;
     int piggyId;
-    PiggyBank temp;
 
+    PiggyBank temp;
     while (in >> temp)
     {
-        // piggyId = temp.getId();
+        piggyId = temp.getNumber();
         if (piggyId > maxId)
         {
             maxId = piggyId;
