@@ -66,10 +66,42 @@ void ScanList::addScan(int serialNumber)
 
 bool ScanList::removeScan(int serialNumber)
 {
+    Scan *previous = NULL;
+    Scan *current = this->scans;
+
+    while (current != NULL)
+    {
+        if (serialNumber == current->getSerialNumber())
+        {
+            // remove current from the others and delete the memory allocation.
+            // So we want to set the head to next of current.
+            if (previous == NULL)
+            {
+                // This will work for 1 element list, since it will then be empty
+                this->scans = current->getNext();
+            }
+            else
+            {
+                // We set the reference to current's next thus ommiting current from the linked list.
+                previous->setNext(current->getNext());
+            }
+
+            // Set pointer to next to null otherwise we delete elements we did not want to delete.
+            current->setNext(NULL);
+            // Clean up memory and return indication of successful removal.
+            delete current;
+            return true;
+        }
+
+        previous = current;
+        current = current->getNext();
+    }
+    // Can be head, in between, or tail.
     return false;
 }
 
 int ScanList::getTimesRecycled(int serialNumber)
 {
+    // If we cant find, return 0 (on exhaustion)
     return -1;
 }

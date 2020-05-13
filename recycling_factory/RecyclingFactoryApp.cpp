@@ -22,6 +22,8 @@ int main()
     sl.addScan(12);
     sl.addScan(13);
 
+    sl.removeScan(1);
+
     cout << sl << endl;
 
     return 0;
