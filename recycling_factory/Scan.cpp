@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include "Scan.h"
 
+Scan::Scan()
+{
+    this->serialNumber = -1;
+    this->timesRecycled = -1;
+    this->next = NULL;
+}
+
 Scan::Scan(int number)
 {
     this->serialNumber = number;

@@ -12,6 +12,7 @@ private:
     Scan *next;
 
 public:
+    Scan();
     Scan(int number);             // post: this->serialNumber == number and this-> timesRecycled == 1
     virtual ~Scan();              // post: object has been destructed
     int getSerialNumber();        // post: this->serialNumber has been returned

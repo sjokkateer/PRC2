@@ -1,6 +1,7 @@
 #ifndef SCAN_LIST_H
 #define SCAN_LIST_H
 
+#include <stdio.h>
 #include "Scan.h"
 
 class ScanList
@@ -19,6 +20,25 @@ public:
                                             // ELSE false has been returned
     int getTimesRecycled(int serialNumber); // post: IF a scan with serialNumber is present in the list
                                             // THEN returns the value of timesRecycled of that scan // ELSE returns 0
+    friend ostream &operator<<(ostream &out, const ScanList &scanList)
+    {
+        Scan *current = scanList.scans;
+
+        while (current != NULL)
+        {
+            out << current->getSerialNumber();
+            out << " (" << current->getTimesRecycled() << ")";
+
+            if (current->getNext() != NULL)
+            {
+                out << " -> ";
+            }
+
+            current = current->getNext();
+        }
+
+        return out;
+    }
 };
 
 #endif
