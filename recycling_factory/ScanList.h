@@ -24,17 +24,24 @@ public:
     {
         Scan *current = scanList.scans;
 
-        while (current != NULL)
+        if (current == NULL)
         {
-            out << current->getSerialNumber();
-            out << " (" << current->getTimesRecycled() << ")";
-
-            if (current->getNext() != NULL)
+            out << "Scan list is empty.";
+        }
+        else
+        {
+            while (current != NULL)
             {
-                out << " -> ";
-            }
+                out << current->getSerialNumber();
+                out << " (" << current->getTimesRecycled() << ")";
 
-            current = current->getNext();
+                if (current->getNext() != NULL)
+                {
+                    out << " -> ";
+                }
+
+                current = current->getNext();
+            }
         }
 
         return out;

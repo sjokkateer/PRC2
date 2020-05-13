@@ -34,7 +34,6 @@ void ScanList::addScan(int serialNumber)
 
         while (current != NULL) // Will always be executed once, once we get here.
         {
-            // Alternatively we could have looped until next == NULL or next serialNumber > serialNumber
             if (serialNumber < current->getSerialNumber())
             {
                 nextScan = new Scan(serialNumber);

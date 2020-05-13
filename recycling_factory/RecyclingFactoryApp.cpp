@@ -6,8 +6,9 @@
 
 using namespace std;
 
+void displayGreeting();
 void displayMenu();
-void callAppropriateMethod(int choice, ScanList sl);
+void callAppropriateMethod(int choice, ScanList &sl);
 
 #define EXIT 0
 
@@ -16,6 +17,7 @@ int main()
     ScanList sl = ScanList();
 
     int choice;
+    displayGreeting();
 
     while (true)
     {
@@ -24,6 +26,7 @@ int main()
         if (choice == EXIT)
             break;
         callAppropriateMethod(choice, sl);
+        print();
     }
 
     // sl.addScan(5);
@@ -68,10 +71,74 @@ int main()
     return 0;
 }
 
-void displayMenu()
+void displayGreeting()
 {
+    print();
+    print("Welcome to the scanlist application");
+    print("Here you can scan objects with serial numbers.");
+    print("NOTE!");
+    print("The scan list is displayed as: serialNo (times recycled) -> next scan");
+    print();
 }
 
-void callAppropriateMethod(int choice, ScanList scanList)
+void displayMenu()
 {
+    print("Scan List");
+    print("---------");
+    print("0 to exit");
+    print("1 display the scan list");
+    print("2 scan a serialnumber");
+    print("3 remove a scan by serialnumber");
+    print("4 display number of times recycled by serialnumber");
+    print("5 create new scan list (removes all old data)");
+    print();
+}
+
+void callAppropriateMethod(int choice, ScanList &scanList)
+{
+    int serialNumber;
+    string message;
+
+    bool successfullyRemoved;
+    int numberOfTimesRecycled;
+
+    switch (choice)
+    {
+    case 1:
+        cout << scanList << endl;
+        break;
+    case 2:
+        serialNumber = getIntegerInput("Please enter a serial number: ");
+        scanList.addScan(serialNumber);
+        break;
+    case 3:
+        serialNumber = getIntegerInput("Please enter a serial number: ");
+        successfullyRemoved = scanList.removeScan(serialNumber);
+        message = "successfully removed";
+
+        if (!successfullyRemoved)
+        {
+            message = "not " + message;
+        }
+
+        print();
+
+        message = to_string(serialNumber) + " was " + message;
+        print(message);
+        break;
+    case 4:
+        serialNumber = getIntegerInput("Please enter a serial number: ");
+        numberOfTimesRecycled = scanList.getTimesRecycled(serialNumber);
+
+        print();
+
+        message = to_string(serialNumber) + " was " + to_string(numberOfTimesRecycled) + " times recycled.";
+        print(message);
+        break;
+    case 5:
+        scanList = ScanList();
+        break;
+    default:
+        break;
+    }
 }
