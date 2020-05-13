@@ -73,11 +73,8 @@ bool ScanList::removeScan(int serialNumber)
     {
         if (serialNumber == current->getSerialNumber())
         {
-            // remove current from the others and delete the memory allocation.
-            // So we want to set the head to next of current.
             if (previous == NULL)
             {
-                // This will work for 1 element list, since it will then be empty
                 this->scans = current->getNext();
             }
             else
@@ -96,12 +93,24 @@ bool ScanList::removeScan(int serialNumber)
         previous = current;
         current = current->getNext();
     }
+
     // Can be head, in between, or tail.
     return false;
 }
 
 int ScanList::getTimesRecycled(int serialNumber)
 {
-    // If we cant find, return 0 (on exhaustion)
-    return -1;
+    Scan *current = this->scans;
+
+    while (current != NULL)
+    {
+        if (serialNumber == current->getSerialNumber())
+        {
+            return current->getTimesRecycled();
+        }
+
+        current = current->getNext();
+    }
+
+    return 0;
 }
