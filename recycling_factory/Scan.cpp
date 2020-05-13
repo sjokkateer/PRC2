@@ -1,13 +1,6 @@
 #include <stdio.h>
 #include "Scan.h"
 
-Scan::Scan()
-{
-    this->serialNumber = -1;
-    this->timesRecycled = -1;
-    this->next = NULL;
-}
-
 Scan::Scan(int number)
 {
     this->serialNumber = number;
@@ -15,7 +8,14 @@ Scan::Scan(int number)
     this->next = NULL;
 }
 
-Scan::~Scan() {}
+Scan::~Scan()
+{
+    // This object is supposedly the tail if next is null.
+    if (this->next != NULL)
+    {
+        delete this->next;
+    }
+}
 
 int Scan::getSerialNumber()
 {

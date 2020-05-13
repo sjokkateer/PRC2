@@ -9,8 +9,11 @@ ScanList::ScanList()
 
 ScanList::~ScanList()
 {
-    // Delete all scan objects in the linked list.
-    // Thus delete current while holding next?
+    // Delete the head, if head will delete next it will work out recursively.
+    if (this->scans != NULL)
+    {
+        delete this->scans;
+    }
 }
 
 void ScanList::addScan(int serialNumber)
