@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -6,30 +7,64 @@ using namespace std;
 
 int main()
 {
-    Student s = Student("barnaby", 23, 1234567);
-    s.addModule("PCS2", 7);
-    s.addModule("PCS1", 8);
+    // Student s = Student("barnaby", 23, 1234567);
+    // s.addModule("PCS2", 7);
+    // s.addModule("PCS1", 8);
 
-    // Copy constructor is called.
-    Student s2 = s;
+    // ofstream outputFile("students.txt");
 
-    cout << s << endl;
-    cout << "---- grades ----" << endl;
-    s.showGradeList();
+    // if (outputFile.is_open())
+    // {
+    //     outputFile << s;
+    // }
 
-    cout << endl;
+    // outputFile.close();
 
-    s.getGrades()[1]->setGrade(1);
+    Person p = Person("barnaby", 23);
 
-    cout << s << endl;
-    cout << "---- grades ----" << endl;
-    s.showGradeList();
+    cout << p << endl;
 
-    cout << endl;
+    ofstream outputFile("persons.dat", ios::binary);
 
-    cout << s2 << endl;
-    cout << "---- grades ----" << endl;
-    s2.showGradeList();
+    if (outputFile.is_open())
+    {
+        p.store(outputFile);
+        outputFile.close();
+    }
+
+    // ifstream inputFile("persons.dat", ios::binary);
+
+    // Person newP;
+
+    // if (inputFile.is_open())
+    // {
+    //     newP.load(inputFile);
+    //     inputFile.close();
+    // }
+
+    // cout << newP << endl;
+
+    // // Copy constructor is called.
+    // Student s2 = s;
+
+    // cout << s << endl;
+    // cout << "---- grades ----" << endl;
+    // s.showGradeList();
+
+    // cout << endl;
+
+    // // If all went well, changing a grade does not affect the other student's grades
+    // s.getGrades()[1]->setGrade(1);
+
+    // cout << s << endl;
+    // cout << "---- grades ----" << endl;
+    // s.showGradeList();
+
+    // cout << endl;
+
+    // cout << s2 << endl;
+    // cout << "---- grades ----" << endl;
+    // s2.showGradeList();
 
     return 0;
 }

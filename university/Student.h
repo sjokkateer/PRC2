@@ -26,10 +26,24 @@ public:
 
     friend ostream &operator<<(ostream &out, const Student &student)
     {
-        out << student.print();
+        out << student.print() << "\n";
+
+        // Also output the collection of grades.
+        for (ModuleGrade *grade : student.gradeList)
+        {
+            // Write the objects, not the memory addresses
+            out << *grade << ",";
+        }
+
+        out << endl;
 
         return out;
     }
+
+    // friend istream &operator>>(istream &in, Student &student)
+    // {
+    //     in >> student.studentNumber;
+    // }
 };
 
 #endif

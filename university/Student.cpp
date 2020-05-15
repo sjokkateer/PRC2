@@ -48,7 +48,7 @@ vector<ModuleGrade *> Student::getGrades()
 
 string Student::print() const
 {
-    return "(" + to_string(this->studentNumber) + ") " + Person::print();
+    return to_string(this->studentNumber) + " " + Person::print();
 }
 
 Student &Student::operator=(const Student &student)

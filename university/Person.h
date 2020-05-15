@@ -2,6 +2,7 @@
 #define PERSON_H
 
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -15,8 +16,13 @@ public:
     Person();
     Person(const Person &obj);
     Person(string name, int age);
-    virtual string print() const;
+
     Person &operator=(const Person &person);
+    virtual string print() const;
+
+    virtual void store(ofstream &outFile);
+    virtual void load(ifstream &inFile);
+
     friend ostream &operator<<(ostream &out, const Person &person)
     {
         out << person.print();

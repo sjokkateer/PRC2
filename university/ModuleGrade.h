@@ -19,7 +19,7 @@ public:
 
     friend ostream &operator<<(ostream &out, const ModuleGrade &moduleGrade)
     {
-        out << "Module: " << moduleGrade.moduleName << " Grade: " << moduleGrade.moduleGrade;
+        out << moduleGrade.moduleName << ":" << moduleGrade.moduleGrade;
 
         return out;
     }
