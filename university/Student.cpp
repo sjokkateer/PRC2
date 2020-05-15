@@ -2,6 +2,11 @@
 
 #include <iostream>
 
+Student::Student() : Person()
+{
+    this->studentNumber = -1;
+}
+
 Student::Student(const Student &obj) : Person(obj)
 {
     this->studentNumber = obj.studentNumber;
@@ -44,6 +49,43 @@ void Student::showGradeList()
 vector<ModuleGrade *> Student::getGrades()
 {
     return this->gradeList;
+}
+
+void Student::store(ofstream &outputFile)
+{
+    outputFile.write(reinterpret_cast<char *>(&this->studentNumber), sizeof(this->studentNumber));
+    Person::store(outputFile);
+
+    // Write the number of module grades to file, such that we can always obtain how
+    // many objects to expect on loading.
+    int numberOfModuleGrades = this->getGrades().size();
+    outputFile.write(reinterpret_cast<char *>(&numberOfModuleGrades), sizeof(numberOfModuleGrades));
+
+    for (ModuleGrade *grade : this->getGrades())
+    {
+        // Serialize each module grade.
+        grade->store(outputFile);
+    }
+}
+
+void Student::load(ifstream &inputFile)
+{
+    inputFile.read(reinterpret_cast<char *>(&this->studentNumber), sizeof(this->studentNumber));
+    Person::load(inputFile);
+
+    // Obtain the number of stored module grades.
+    int numberOfModuleGrades;
+    inputFile.read(reinterpret_cast<char *>(&numberOfModuleGrades), sizeof(numberOfModuleGrades));
+
+    ModuleGrade *grade;
+    for (int i = 0; i < numberOfModuleGrades; i++)
+    {
+        // load a modulegrade and add it to the vector.
+        grade = new ModuleGrade();
+        grade->load(inputFile);
+
+        this->gradeList.push_back(grade);
+    }
 }
 
 string Student::print() const

@@ -2,6 +2,8 @@
 
 Person::Person()
 {
+    this->name = "unknown";
+    this->age = -1;
 }
 
 Person::Person(const Person &obj)
@@ -29,9 +31,6 @@ void Person::store(ofstream &outFile)
     // Store name
     int nameLength = this->name.length();
 
-    cout << nameLength << endl;
-    cout << this->name.data() << endl;
-
     outFile.write(reinterpret_cast<char *>(&nameLength), sizeof(int));
     // data method of string returns pointer to the character array represented by the value of string.
     // This is however not prepended with the \0 termination character.
@@ -53,13 +52,9 @@ void Person::load(ifstream &inputFile)
     int nameLength;
     inputFile.read(reinterpret_cast<char *>(&nameLength), sizeof(int));
 
-    cout << nameLength << endl;
-
     inputFile.read(buffer, nameLength);
     buffer[nameLength] = '\0';
     this->name = buffer;
-
-    cout << this->name << endl;
 }
 
 Person &Person::operator=(const Person &person)

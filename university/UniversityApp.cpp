@@ -11,60 +11,37 @@ int main()
     // s.addModule("PCS2", 7);
     // s.addModule("PCS1", 8);
 
-    // ofstream outputFile("students.txt");
+    // ofstream outputFile("students.dat", ios::binary);
 
     // if (outputFile.is_open())
     // {
-    //     outputFile << s;
+    //     s.store(outputFile);
+    //     outputFile.close();
     // }
 
-    // outputFile.close();
+    Student newStudent;
 
-    Person p = Person("barnaby", 23);
+    ifstream inputFile("students.dat");
 
-    cout << p << endl;
-
-    ofstream outputFile("persons.dat", ios::binary);
-
-    if (outputFile.is_open())
+    if (inputFile.is_open())
     {
-        p.store(outputFile);
-        outputFile.close();
+        newStudent.load(inputFile);
+        inputFile.close();
     }
 
-    // ifstream inputFile("persons.dat", ios::binary);
+    cout << newStudent << endl;
 
-    // Person newP;
+    // newStudent.addModule("EDB3", 9);
 
-    // if (inputFile.is_open())
+    // // ofstream outputFile("students.dat", ios::binary);
+    // outputFile.open("students.dat", ios::binary);
+    // if (outputFile.is_open())
     // {
-    //     newP.load(inputFile);
-    //     inputFile.close();
+    //     newStudent.store(outputFile);
+    //     outputFile.close();
     // }
 
-    // cout << newP << endl;
-
-    // // Copy constructor is called.
-    // Student s2 = s;
-
-    // cout << s << endl;
-    // cout << "---- grades ----" << endl;
-    // s.showGradeList();
-
-    // cout << endl;
-
-    // // If all went well, changing a grade does not affect the other student's grades
-    // s.getGrades()[1]->setGrade(1);
-
-    // cout << s << endl;
-    // cout << "---- grades ----" << endl;
-    // s.showGradeList();
-
-    // cout << endl;
-
-    // cout << s2 << endl;
-    // cout << "---- grades ----" << endl;
-    // s2.showGradeList();
+    // newStudent.showGradeList();
 
     return 0;
 }

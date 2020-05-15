@@ -12,10 +12,14 @@ private:
     int moduleGrade;
 
 public:
+    ModuleGrade();
     ModuleGrade(const ModuleGrade &obj);
     ModuleGrade(string moduleName, int moduleGrade);
     void showModule();
     void setGrade(int newGrade);
+
+    void store(ofstream &outputFile);
+    void load(ifstream &inputFile);
 
     friend ostream &operator<<(ostream &out, const ModuleGrade &moduleGrade)
     {
