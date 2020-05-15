@@ -13,11 +13,10 @@ private:
 
 public:
     Person();
+    Person(const Person &obj);
     Person(string name, int age);
-
-    // const has to do such that we cannot change this after we passed it into the
-    // output buffer? Can be called on a constant object
     virtual string print() const;
+    Person &operator=(const Person &person);
     friend ostream &operator<<(ostream &out, const Person &person)
     {
         out << person.print();
