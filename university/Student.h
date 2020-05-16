@@ -22,6 +22,7 @@ public:
     void addModule(string moduleName, int moduleGrade);
     void showGradeList();
     vector<ModuleGrade *> getGrades();
+    int getStudentNumber();
 
     void store(ofstream &outFile);
     void load(ifstream &inFile);
@@ -44,8 +45,6 @@ public:
                 out << ", ";
             }
         }
-
-        out << endl;
 
         return out;
     }

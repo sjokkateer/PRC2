@@ -51,6 +51,11 @@ vector<ModuleGrade *> Student::getGrades()
     return this->gradeList;
 }
 
+int Student::getStudentNumber()
+{
+    return this->studentNumber;
+}
+
 void Student::store(ofstream &outputFile)
 {
     outputFile.write(reinterpret_cast<char *>(&this->studentNumber), sizeof(this->studentNumber));
