@@ -30,6 +30,7 @@ public:
     bool removeGroup(int groupIndex);
     bool addToGroup(int groupIndex, int studentNumber);
     bool removeFromGroup(int groupIndex, int studentNumber);
+    void removeFromGroups(int studentNumber);
     bool outputGroup(int groupIndex);
     void showGroups();
 

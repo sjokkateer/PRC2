@@ -4,66 +4,187 @@
 using namespace std;
 
 #include "University.h"
+#include "helpers.h"
+
+void displayGreeting();
+void displayMenu();
+void callAppropriateMethod(int choice, University &university);
+
+string getStudentName();
+string getModuleName();
+string getNameForTopic(string topic);
+int getStudentNumber();
+
+int getGroupNumber();
 
 void initializeUniversity(University &university);
 void storeUniversityState(const University &university);
-void hasBeenAdded(bool added);
-void hasBeenRemoved(bool removed);
-void printActionResult(string action, bool didHappen);
+
+void hasBeenOutput(string topic, bool successfullyOutput);
+void hasBeenAdded(string topic, bool added);
+void hasBeenRemoved(string topic, bool removed);
+void printActionResult(string topic, string action, bool didHappen);
+
+#define EXIT 0
 
 int main()
 {
-    // zero to exit.
-    // All functions but split with their category for now.
-    // So how can you ensure that the same references
-    // of students are inside the groups
-
     University uni = University();
     initializeUniversity(uni);
 
-    uni.showStudents();
-    uni.showGroups();
-    cout << "Finished" << endl;
-    // bool added = uni.addStudent(1234567, "barnaby", 23);
-    // added = uni.addStudent(200, "Barteljaap", 50);
+    int choice;
+    displayGreeting();
 
-    // int groupIndex = uni.createNewGroup(); // Will be newly pushed item thus last index.
-    // uni.addToGroup(groupIndex, 1234567);
-    // uni.showGroups();
-
-    // uni.addToGroup(groupIndex, 1234567);
-    // uni.showGroups();
-
-    // uni.addToGroup(groupIndex, 200);
-    // uni.showGroups();
-
-    // uni.outputGroup(groupIndex);
-
-    // int firstGroup = groupIndex;
-
-    // groupIndex = uni.createNewGroup();
-    // uni.addToGroup(groupIndex, 200);
-    // uni.showGroups();
-
-    // uni.removeFromGroup(firstGroup, 200);
-    // uni.showGroups();
-
-    // uni.addGradeToStudent(1234567, "PCS_2", 8);
-    // uni.addGradeToStudent(1234567, "EDB_3", 7);
-
-    // uni.outputGroup(groupIndex);
-
-    // uni.outputGroup(firstGroup);
-
-    // ofstream outputFile(UNIVERSITY_DATA_FILE);
-    // if (outputFile.is_open())
-    // {
-    //     uni.store(outputFile);
-    //     outputFile.close();
-    // }
+    while (true)
+    {
+        displayMenu();
+        choice = getIntegerInput();
+        if (choice == EXIT)
+            break;
+        callAppropriateMethod(choice, uni);
+        print();
+    }
 
     storeUniversityState(uni);
     return 0;
+}
+
+void displayGreeting()
+{
+    print();
+    print("Welcome to the University");
+    print("This application allows you to manage students and groups of students");
+    print("Once you exit the application, the state of the university will be serialized");
+    print("On next startup, the old state will be loaded for you to continue where you left off");
+    print();
+}
+
+void displayMenu()
+{
+    print("UNIVERSITY");
+    print("----------");
+    print("0 to exit");
+
+    print("STUDENTS");
+    print("--------");
+    print("1 to add student");
+    print("2 to remove student");
+    print("3 to add a grade to student");
+    print("4 to show all students");
+    print("5 to write a student to file");
+    print();
+
+    print("GROUPS");
+    print("------");
+    print("6 to create a group");
+    print("7 to remove a group");
+    print("8 to add a student to a group");
+    print("9 to remove a student from a group");
+    print("10 to show all groups");
+    print("11 to write a group to file");
+    print();
+}
+
+void callAppropriateMethod(int choice, University &university)
+{
+    int studentNumber;
+    string name;
+    int age;
+    bool added;
+    bool removed;
+
+    string moduleName;
+    int moduleGrade;
+
+    bool successfullyOutput;
+
+    int groupIndex;
+
+    cout << endl;
+
+    switch (choice)
+    {
+    case 1:
+        name = getStudentName();
+        studentNumber = getStudentNumber();
+        age = getIntegerInput("Please enter an age: ");
+        added = university.addStudent(studentNumber, name, age);
+
+        hasBeenAdded("student", added);
+        break;
+    case 2:
+        studentNumber = getStudentNumber();
+        removed = university.removeStudent(studentNumber);
+
+        hasBeenRemoved("student", removed);
+        break;
+    case 3:
+        studentNumber = getStudentNumber();
+        moduleName = getModuleName();
+        moduleGrade = getIntegerInput("Please enter a grade: ");
+
+        added = university.addGradeToStudent(studentNumber, moduleName, moduleGrade);
+        hasBeenAdded("grade", added);
+        break;
+    case 4:
+        print("--- STUDENTS ---");
+        university.showStudents();
+        break;
+    case 5:
+        studentNumber = getStudentNumber();
+        successfullyOutput = university.outputStudent(studentNumber);
+
+        hasBeenOutput("student", successfullyOutput);
+        break;
+    case 6:
+        university.createNewGroup();
+        print("New group created");
+        break;
+    case 7:
+        university.showGroups();
+
+        groupIndex = getGroupNumber();
+        removed = university.removeGroup(groupIndex);
+
+        hasBeenRemoved("group", removed);
+        break;
+    case 8:
+        university.showGroups();
+
+        groupIndex = getGroupNumber();
+        studentNumber = getStudentNumber();
+        added = university.addToGroup(groupIndex, studentNumber);
+
+        hasBeenAdded("student", added);
+        cout << " to group.";
+        break;
+    case 9:
+        university.showGroups();
+
+        groupIndex = getGroupNumber();
+        studentNumber = getStudentNumber();
+        removed = university.addToGroup(groupIndex, studentNumber);
+
+        hasBeenAdded("student", removed);
+        cout << " from group.";
+        break;
+    case 10:
+        print("--- GROUPS ---");
+        university.showGroups();
+        break;
+    case 11:
+        university.showGroups();
+
+        groupIndex = getGroupNumber();
+        successfullyOutput = university.outputGroup(groupIndex);
+
+        hasBeenOutput("group", successfullyOutput);
+        break;
+    default:
+        break;
+    }
+
+    cout << endl;
 }
 
 void initializeUniversity(University &university)
@@ -86,26 +207,65 @@ void storeUniversityState(const University &university)
     }
 }
 
-void hasBeenAdded(bool added)
+void hasBeenAdded(string topic, bool added)
 {
-    printActionResult("added", added);
+    printActionResult(topic, "added", added);
 }
 
-void hasBeenRemoved(bool removed)
+void hasBeenRemoved(string topic, bool removed)
 {
-    printActionResult("removed", removed);
+    printActionResult(topic, "removed", removed);
 }
 
-void printActionResult(string action, bool didHappen)
+void printActionResult(string topic, string action, bool didHappen)
 {
-    string result;
-    if (didHappen)
+    string message = topic + " has ";
+    if (!didHappen)
     {
-        result = "Has been";
+        message += "not ";
     }
-    else
+
+    message += "been " + action;
+
+    cout << message;
+}
+
+string getStudentName()
+{
+    return getNameForTopic("student");
+}
+
+string getNameForTopic(string topic)
+{
+    cin.ignore();
+
+    string name;
+    // This does however return for ex 1.23 as a name
+    while (isEmptyString(name) || !isNotInteger(name))
     {
-        result = "Has not been";
+        cout << "Please enter a name for the " + topic + ": ";
+        getline(cin, name);
     }
-    cout << result << " " << action << endl;
+
+    return name;
+}
+
+string getModuleName()
+{
+    return getNameForTopic("module");
+}
+
+int getStudentNumber()
+{
+    return getIntegerInput("Please enter a student number: ");
+}
+
+void hasBeenOutput(string topic, bool successfullyOutput)
+{
+    printActionResult(topic, "output", successfullyOutput);
+}
+
+int getGroupNumber()
+{
+    return getIntegerInput("Please enter a group number: ") - 1;
 }

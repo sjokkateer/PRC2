@@ -57,6 +57,9 @@ bool University::removeStudent(int studentNumber)
         student = this->students[i];
         if (student->getStudentNumber() == studentNumber)
         {
+            // Remove student from groups first.
+            this->removeFromGroups(studentNumber);
+
             // Use erase to manage the removal of the student pointer.
             this->students.erase(this->students.begin() + i);
             return true;
@@ -66,14 +69,21 @@ bool University::removeStudent(int studentNumber)
     return false;
 }
 
+void University::removeFromGroups(int studentNumber)
+{
+    for (int i = 0; i < this->groups.size(); i++)
+    {
+        this->removeFromGroup(i, studentNumber);
+    }
+}
+
 void University::showStudents()
 {
     for (Student *student : this->students)
     {
         cout << *student << endl;
+        cout << endl;
     }
-
-    cout << endl;
 }
 
 bool University::outputStudent(int studentNumber)
@@ -204,9 +214,10 @@ bool University::removeFromGroup(int groupIndex, int studentNumber)
 
 void University::showGroups()
 {
-    for (Group *group : this->groups)
+    // Change to for loop to have index as well.
+    for (int i = 0; i < this->groups.size(); i++)
     {
-        cout << *group << endl;
+        cout << "(" << i + 1 << ") " << *this->groups[i] << endl;
     }
 
     cout << endl;
