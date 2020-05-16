@@ -72,6 +72,8 @@ void University::showStudents()
     {
         cout << *student << endl;
     }
+
+    cout << endl;
 }
 
 bool University::outputStudent(int studentNumber)
@@ -206,6 +208,8 @@ void University::showGroups()
     {
         cout << *group << endl;
     }
+
+    cout << endl;
 }
 
 bool University::outputGroup(int groupIndex)
@@ -232,4 +236,68 @@ bool University::write(int groupIndex, Group *group)
     }
 
     return false;
+}
+
+void University::store(ofstream &outputFile) const
+{
+    int numberOfStudents = this->students.size();
+    // By ref since it needs to be a pointer for reinterpret_cast.
+    outputFile.write(reinterpret_cast<char *>(&numberOfStudents), sizeof(numberOfStudents));
+
+    // Then serialize all students
+    for (Student *student : this->students)
+    {
+        student->store(outputFile);
+    }
+
+    // Same for groups.
+    int numberOfGroups = this->groups.size();
+    outputFile.write(reinterpret_cast<char *>(&numberOfGroups), sizeof(numberOfGroups));
+
+    for (Group *group : this->groups)
+    {
+        group->store(outputFile);
+    }
+}
+
+void University::load(ifstream &inputFile)
+{
+    // First load all the students
+    int numberOfStudents;
+    inputFile.read(reinterpret_cast<char *>(&numberOfStudents), sizeof(numberOfStudents));
+
+    Student *student;
+    for (int i = 0; i < numberOfStudents; i++)
+    {
+        student = new Student();
+        student->load(inputFile);
+        this->students.push_back(student);
+    }
+
+    // create n empty groups based on original number of groups.
+    int numberOfGroups;
+    inputFile.read(reinterpret_cast<char *>(&numberOfGroups), sizeof(numberOfGroups));
+
+    vector<int> studentNumbers;
+    Group *group;
+    for (int i = 0; i < numberOfGroups; i++)
+    {
+        group = new Group();
+        studentNumbers = group->load(inputFile);
+
+        // Map the corresponding students
+        for (int studentNumber : studentNumbers)
+        {
+            student = this->findStudent(studentNumber);
+
+            if (student)
+            {
+                // If the student number exists in our university's collection we add it back to the group.
+                group->addStudent(student);
+            }
+        }
+
+        // Finally push the group with student pointers onto the vector.
+        this->groups.push_back(group);
+    }
 }

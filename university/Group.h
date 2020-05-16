@@ -20,6 +20,8 @@ public:
 
     friend ostream &operator<<(ostream &out, const Group &group)
     {
+        out << "Group: \n";
+
         for (Student *student : group.students)
         {
             out << *student << endl;
@@ -27,6 +29,9 @@ public:
 
         return out;
     }
+
+    void store(ofstream &outputFile);
+    vector<int> load(ifstream &inputFile); // Returns the student numbers of students that were added to this group
 };
 
 #endif

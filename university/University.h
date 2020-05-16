@@ -33,10 +33,8 @@ public:
     bool outputGroup(int groupIndex);
     void showGroups();
 
-    // State before terminating program will always be stored as well.
-    void store(ofstream &outputFile);
-    // State will always be attempted to be loaded at start of app.
-    void load(ifstream &inputFile);
+    void store(ofstream &outputFile) const; // State before terminating program will always be stored as well.
+    void load(ifstream &inputFile);         // State will always be attempted to be loaded at start of app.
 };
 
 #endif
