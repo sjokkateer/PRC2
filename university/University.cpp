@@ -1,12 +1,15 @@
 #include "University.h"
 
-#include <fstream>
-
 University::~University()
 {
     for (Student *student : this->students)
     {
         delete student;
+    }
+
+    for (Group *group : this->groups)
+    {
+        delete group;
     }
 }
 
@@ -101,4 +104,71 @@ bool University::write(Student *student)
     }
 
     return false;
+}
+
+int University::createNewGroup()
+{
+    Group *g = new Group();
+    this->groups.push_back(g);
+
+    return this->groups.size() - 1;
+}
+
+bool University::removeGroup(int groupIndex)
+{
+    if (!this->withinBoundries(groupIndex))
+    {
+        return false;
+    }
+
+    this->groups.erase(this->groups.begin() + groupIndex);
+    return true;
+}
+
+bool University::addToGroup(int groupIndex, int studentNumber)
+{
+    if (!this->withinBoundries(groupIndex))
+    {
+        return false;
+    }
+
+    Student *student = this->findStudent(studentNumber);
+
+    if (!student || this->alreadyInGroup(groupIndex, student))
+    {
+        return false;
+    }
+
+    Group *group = this->groups[groupIndex];
+    group->addStudent(student);
+
+    return true;
+}
+
+bool University::alreadyInGroup(int groupIndex, Student *student)
+{
+    Group *group = this->groups[groupIndex];
+
+    for (Student *studentInGroup : group->getStudents())
+    {
+        if (student->getStudentNumber() == studentInGroup->getStudentNumber())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool University::withinBoundries(int groupIndex)
+{
+    return groupIndex >= 0 && groupIndex < this->groups.size();
+}
+
+void University::showGroups()
+{
+    for (Group *group : this->groups)
+    {
+        cout << *group << endl;
+    }
 }

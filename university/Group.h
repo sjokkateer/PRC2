@@ -14,17 +14,15 @@ private:
     vector<Student *> students;
 
 public:
-    void addStudent(Student &student);
+    void addStudent(Student *student);
     bool removeStudent(int studenNumber);
+    vector<Student *> getStudents();
 
     friend ostream &operator<<(ostream &out, const Group &group)
     {
-        out << "Group: \n";
-        out << "------\n";
-
         for (Student *student : group.students)
         {
-            out << *student;
+            out << *student << endl;
         }
 
         return out;

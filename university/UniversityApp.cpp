@@ -13,14 +13,20 @@ int main()
 {
     University uni = University();
     bool added = uni.addStudent(1234567, "barnaby", 23);
-    // uni.showStudents();
-    hasBeenAdded(added);
-
     added = uni.addStudent(200, "Barteljaap", 50);
-    hasBeenAdded(added);
 
-    uni.outputStudent(1234567);
-    uni.outputStudent(200);
+    int groupIndex = uni.createNewGroup(); // Will be newly pushed item thus last index.
+    uni.addToGroup(groupIndex, 1234567);
+    uni.showGroups();
+
+    uni.addToGroup(groupIndex, 1234567);
+    uni.showGroups();
+
+    uni.addToGroup(groupIndex, 200);
+    uni.showGroups();
+
+    uni.removeGroup(groupIndex);
+    uni.showGroups();
 
     // cout << endl;
     // cout << "STUDENTS: " << endl;

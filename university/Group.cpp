@@ -2,9 +2,9 @@
 
 #include "Group.h"
 
-void Group::addStudent(Student &student)
+void Group::addStudent(Student *student)
 {
-    this->students.push_back(&student);
+    this->students.push_back(student);
 }
 
 bool Group::removeStudent(int studentNumber)
@@ -20,4 +20,9 @@ bool Group::removeStudent(int studentNumber)
     }
 
     return false;
+}
+
+vector<Student *> Group::getStudents()
+{
+    return this->students;
 }
