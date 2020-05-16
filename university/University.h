@@ -14,6 +14,7 @@ private:
     vector<Group *> groups;
     Student *findStudent(int studentNumber);
     bool write(Student *student);
+    bool write(int groupIndex, Group *group);
     bool withinBoundries(int groupIndex);
     bool alreadyInGroup(int groupIndex, Student *student);
 

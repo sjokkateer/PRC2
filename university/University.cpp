@@ -76,7 +76,6 @@ void University::showStudents()
 
 bool University::outputStudent(int studentNumber)
 {
-
     if (Student::isValidStudentNumber(studentNumber))
     {
         Student *student = this->findStudent(studentNumber);
@@ -189,4 +188,30 @@ void University::showGroups()
     {
         cout << *group << endl;
     }
+}
+
+bool University::outputGroup(int groupIndex)
+{
+    if (this->withinBoundries(groupIndex))
+    {
+        Group *group = this->groups[groupIndex];
+        return this->write(groupIndex, group);
+    }
+
+    return false;
+}
+
+bool University::write(int groupIndex, Group *group)
+{
+    string fileName = "group_" + to_string(groupIndex + 1);
+    ofstream outputFile(fileName);
+
+    if (outputFile.is_open())
+    {
+        outputFile << *group;
+        outputFile.close();
+        return true;
+    }
+
+    return false;
 }

@@ -25,6 +25,8 @@ int main()
     uni.addToGroup(groupIndex, 200);
     uni.showGroups();
 
+    uni.outputGroup(groupIndex);
+
     int firstGroup = groupIndex;
 
     groupIndex = uni.createNewGroup();
@@ -33,6 +35,10 @@ int main()
 
     uni.removeFromGroup(firstGroup, 200);
     uni.showGroups();
+
+    uni.outputGroup(groupIndex);
+
+    uni.outputGroup(firstGroup);
 
     // cout << endl;
     // cout << "STUDENTS: " << endl;
