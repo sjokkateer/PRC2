@@ -31,6 +31,11 @@ Student::~Student()
     }
 }
 
+bool Student::isValidStudentNumber(int studentNumber)
+{
+    return studentNumber > 0;
+}
+
 void Student::addModule(string moduleName, int moduleGrade)
 {
     // Dynamic memory
