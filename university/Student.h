@@ -35,6 +35,7 @@ public:
 
     friend ostream &operator<<(ostream &out, const Student &student)
     {
+        out << "Student: ";
         out << student.print();
 
         // Also output the collection of grades.
@@ -43,6 +44,7 @@ public:
         if (numberOfGrades > 0)
         {
             out << "\n";
+            out << "Grades: [";
         }
 
         for (int i = 0; i < numberOfGrades; i++)
@@ -54,15 +56,14 @@ public:
             {
                 out << ", ";
             }
+            else
+            {
+                out << "]";
+            }
         }
 
         return out;
     }
-
-    // friend istream &operator>>(istream &in, Student &student)
-    // {
-    //     in >> student.studentNumber;
-    // }
 };
 
 #endif

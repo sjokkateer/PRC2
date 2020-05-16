@@ -24,6 +24,7 @@ public:
     bool removeStudent(int studentNumber);                    // if not exists false
     void showStudents();                                      // Only loops over and outputs each student
     bool outputStudent(int studentNumber);                    // Writes the students details to a text file
+    bool addGradeToStudent(int studentNumber, string moduleName, int moduleGrade);
 
     int createNewGroup();
     bool removeGroup(int groupIndex);
@@ -32,7 +33,10 @@ public:
     bool outputGroup(int groupIndex);
     void showGroups();
 
-    // State of the university will always be stored before exit.
+    // State before terminating program will always be stored as well.
+    void store(ofstream &outputFile);
+    // State will always be attempted to be loaded at start of app.
+    void load(ifstream &inputFile);
 };
 
 #endif

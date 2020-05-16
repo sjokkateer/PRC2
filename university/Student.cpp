@@ -38,7 +38,6 @@ bool Student::isValidStudentNumber(int studentNumber)
 
 void Student::addModule(string moduleName, int moduleGrade)
 {
-    // Dynamic memory
     ModuleGrade *grade = new ModuleGrade(moduleName, moduleGrade);
     this->gradeList.push_back(grade);
 }

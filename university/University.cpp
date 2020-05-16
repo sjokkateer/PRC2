@@ -105,6 +105,24 @@ bool University::write(Student *student)
     return false;
 }
 
+bool University::addGradeToStudent(int studentNumber, string moduleName, int moduleGrade)
+{
+    if (!Student::isValidStudentNumber(studentNumber))
+    {
+        return false;
+    }
+
+    Student *student = this->findStudent(studentNumber);
+
+    if (!student)
+    {
+        return false;
+    }
+
+    student->addModule(moduleName, moduleGrade);
+    return true;
+}
+
 int University::createNewGroup()
 {
     Group *g = new Group();
