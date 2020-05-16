@@ -15,7 +15,7 @@ private:
 
 public:
     void addStudent(Student *student);
-    bool removeStudent(int studenNumber);
+    bool removeStudent(Student *student);
     vector<Student *> getStudents();
 
     friend ostream &operator<<(ostream &out, const Group &group)

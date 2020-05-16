@@ -7,12 +7,11 @@ void Group::addStudent(Student *student)
     this->students.push_back(student);
 }
 
-bool Group::removeStudent(int studentNumber)
+bool Group::removeStudent(Student *student)
 {
-    // To remove student from the group we just use regular remove
     for (int i = 0; i < this->students.size(); i++)
     {
-        if (this->students[i]->getStudentNumber() == studentNumber)
+        if (this->students[i]->getStudentNumber() == student->getStudentNumber())
         {
             this->students.erase(this->students.begin() + i);
             return true;

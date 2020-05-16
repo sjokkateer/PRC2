@@ -25,7 +25,13 @@ int main()
     uni.addToGroup(groupIndex, 200);
     uni.showGroups();
 
-    uni.removeGroup(groupIndex);
+    int firstGroup = groupIndex;
+
+    groupIndex = uni.createNewGroup();
+    uni.addToGroup(groupIndex, 200);
+    uni.showGroups();
+
+    uni.removeFromGroup(firstGroup, 200);
     uni.showGroups();
 
     // cout << endl;

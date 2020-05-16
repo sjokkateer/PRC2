@@ -165,6 +165,24 @@ bool University::withinBoundries(int groupIndex)
     return groupIndex >= 0 && groupIndex < this->groups.size();
 }
 
+bool University::removeFromGroup(int groupIndex, int studentNumber)
+{
+    if (!this->withinBoundries(groupIndex))
+    {
+        return false;
+    }
+
+    Student *student = this->findStudent(studentNumber);
+
+    if (!student)
+    {
+        return false;
+    }
+
+    Group *group = this->groups[groupIndex];
+    return group->removeStudent(student);
+}
+
 void University::showGroups()
 {
     for (Group *group : this->groups)
