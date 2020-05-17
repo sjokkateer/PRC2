@@ -28,6 +28,8 @@ Student *University::findStudent(int studentNumber)
 
 bool University::addStudent(int studentNumber, string name, int age)
 {
+    // Normally I would add this kind of validation to a validator
+    // object that also returns an array of error messages.
     if (!Student::isValidStudentNumber(studentNumber))
     {
         return false;
@@ -40,6 +42,9 @@ bool University::addStudent(int studentNumber, string name, int age)
         return false;
     }
 
+    // There is no validation for age though.
+    // even though it gets handled by the helper function atm, that
+    // only positive numbers can be given.
     student = new Student(name, age, studentNumber);
     this->students.push_back(student);
 
@@ -48,13 +53,12 @@ bool University::addStudent(int studentNumber, string name, int age)
 
 bool University::removeStudent(int studentNumber)
 {
-    // For now delete pointer, later on we want to remove
-    // the student from every group first.
     Student *student = NULL;
 
     for (int i = 0; i < this->students.size(); i++)
     {
         student = this->students[i];
+
         if (student->getStudentNumber() == studentNumber)
         {
             // Remove student from groups first.
@@ -69,6 +73,8 @@ bool University::removeStudent(int studentNumber)
     return false;
 }
 
+// Synchronizes the groups, since the student with studentNumber
+// is non existent atm.
 void University::removeFromGroups(int studentNumber)
 {
     for (int i = 0; i < this->groups.size(); i++)
@@ -86,6 +92,7 @@ void University::showStudents()
     }
 }
 
+// Is responsible for outputting the student's details to a text file.
 bool University::outputStudent(int studentNumber)
 {
     if (Student::isValidStudentNumber(studentNumber))
@@ -109,6 +116,7 @@ bool University::write(Student *student)
 
     if (outputFile.is_open())
     {
+        // Dereference to an object.
         outputFile << *student;
         outputFile.close();
         return true;
@@ -131,10 +139,14 @@ bool University::addGradeToStudent(int studentNumber, string moduleName, int mod
         return false;
     }
 
+    // Same here, no validation for the grade even though this is handled
+    // by the helper function atm.
     student->addModule(moduleName, moduleGrade);
     return true;
 }
 
+// Return value is not used atm, it was when testing functions
+// individually.
 int University::createNewGroup()
 {
     Group *g = new Group();
@@ -191,6 +203,8 @@ bool University::alreadyInGroup(int groupIndex, Student *student)
 
 bool University::withinBoundries(int groupIndex)
 {
+    // Maybe mathematically 0 <= groupIndex < groupSize wouldve been nicer
+    // Although the logic would be expressed as coded imo.
     return groupIndex >= 0 && groupIndex < this->groups.size();
 }
 
@@ -223,6 +237,7 @@ void University::showGroups()
     cout << endl;
 }
 
+// Writes a group to a text file.
 bool University::outputGroup(int groupIndex)
 {
     if (this->withinBoundries(groupIndex))
@@ -273,8 +288,8 @@ void University::store(ofstream &outputFile) const
 
 void University::load(ifstream &inputFile)
 {
-    // First load all the students
     int numberOfStudents;
+    // Cause it needs to know how many bytes it has to read into the passed value.
     inputFile.read(reinterpret_cast<char *>(&numberOfStudents), sizeof(numberOfStudents));
 
     Student *student;

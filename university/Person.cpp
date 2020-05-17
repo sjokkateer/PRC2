@@ -25,20 +25,12 @@ string Person::print() const
 
 void Person::store(ofstream &outFile)
 {
-    // Cast int pointer to char * and write it to file with size.
     outFile.write(reinterpret_cast<char *>(&this->age), sizeof(this->age));
 
-    // Store name
     int nameLength = this->name.length();
-
-    outFile.write(reinterpret_cast<char *>(&nameLength), sizeof(int));
+    outFile.write(reinterpret_cast<char *>(&nameLength), sizeof(nameLength));
     // data method of string returns pointer to the character array represented by the value of string.
     // This is however not prepended with the \0 termination character.
-    // We store the length before the actual data.
-
-    // I wrote sizeof(nameLength) initially lol.
-    // The problem was that the size of namelength was 4 (bytes) the size of an int
-    // and thus on reading we got barn instead of barnaby.
     outFile.write(this->name.data(), nameLength);
 }
 
@@ -50,7 +42,7 @@ void Person::load(ifstream &inputFile)
     static char buffer[BUFFER_SIZE]; //used to read names, static to only have one such.
 
     int nameLength;
-    inputFile.read(reinterpret_cast<char *>(&nameLength), sizeof(int));
+    inputFile.read(reinterpret_cast<char *>(&nameLength), sizeof(nameLength));
 
     inputFile.read(buffer, nameLength);
     buffer[nameLength] = '\0';

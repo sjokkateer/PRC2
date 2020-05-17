@@ -4,6 +4,8 @@
 
 void Group::addStudent(Student *student)
 {
+    // Validation for if a student already is in this group
+    // couldve been put here if return type were bool.
     this->students.push_back(student);
 }
 

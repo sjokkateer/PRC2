@@ -22,6 +22,9 @@ Student::Student(string name, int age, int studentNumber) : Person(name, age)
     this->studentNumber = studentNumber;
 }
 
+// Student destructor is called before it's base class' destructor.
+// Cleaning up the dynamic memory for module grades and finally
+// Person will do its own clean up.
 Student::~Student()
 {
     // delete all module grades (dynamic memory).
